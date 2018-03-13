@@ -44,11 +44,12 @@ public:
     ***************************************************/
    void run(int pageNumber)
    {
+      cerr << "Find page\n";
       // is pageNumber currently being used?
       for (int i = 0; i < getNumSlots(); i++)
          if (pageFrame[i] == pageNumber)
          {
-            PageReplacementAlgorithm::record(pageNumber, false /*no fault*/);
+            record(pageNumber, false /*no fault*/);
             return;
          }
 
@@ -57,8 +58,7 @@ public:
       pageFrame[iNextVictim] = pageNumber;
       
       // call the record method so everything can be reported
-      PageReplacementAlgorithm::record(pageNumber, true /*page fault*/);
-      return;
+      record(pageNumber, true /*page fault*/);
    }
 
 private:

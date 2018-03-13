@@ -1,13 +1,13 @@
 ###############################################################
 # Program:
 #     Lab 10, Page Replacement Lab
-#     <your instructor>, CS345
+#     Brother Ball, CS345
 # Author:
-#     <your name here>
+#     James Palmer
 # Summary:
-#     <put a description here>
+#     
 # Time:
-#     <how long did it take to complete this program?>
+#     
 ###############################################################
 
 ##############################################################
@@ -26,3 +26,5 @@ lab10.o: lab10.cpp pr.h
 pr.o: pr*.h pr.cpp pr.h
 	g++ -c pr.cpp
 
+clean:
+	rm *.o a.out

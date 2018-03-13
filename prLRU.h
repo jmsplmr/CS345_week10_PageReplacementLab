@@ -2,7 +2,7 @@
 * Component:
 *    Page Replacement LRU
 * Author:
-*    <your name>
+*    James Palmer
 * Summary: 
 *    This is the DERRIVED class to implement LRU
 ************************************************************************/
@@ -10,9 +10,8 @@
 #ifndef PR_LRU
 #define PR_LRU
 
-#include "pr.h"   // for the PageReplacementAlgorithm base-class
-
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 /****************************************************
@@ -28,7 +27,58 @@ public:
     *****************************************************/
    PageReplacementLRU(int numSlots) : PageReplacementAlgorithm(numSlots)
    {
-      //////////////// YOUR CODE HERE ////////////////////      
+      //////////////// YOUR CODE HERE ////////////////////  
+      iNextVictim = 0;
+      numFrames = 0;
+   }
+
+   void replacePageInFullFrame (int pageNumber)
+   {
+      for (vector<int>::iterator it = pageStack.begin ();
+           it != pageStack.end (); ++it)
+         for (int i = 0; i < getNumSlots (); i++)
+            if (pageFrame[i] == *it) 
+            {
+               pageFrame[i] = pageNumber;
+               return;
+            }
+   }
+
+   bool pageNumberInFrame (int pageNumber)
+   {
+      for (int i = 0; i < getNumSlots (); i++)
+         if (pageFrame[i] == pageNumber)
+         {
+            record (pageNumber, false /*no fault*/);
+            return true;
+         }
+      return false;
+   }
+
+   void moveReferencePageToBack (int pageNumber)
+   {
+      for (vector<int>::iterator it = pageStack.begin(); it != pageStack.end(); ++it )
+         if (*it == pageNumber)
+         {
+            pageStack.erase (it);
+            pageStack.push_back (pageNumber);
+            break;
+         }
+   }
+
+   void addPageToStack_noDuplicates (int pageNumber)
+   {
+      if (find(pageStack.begin(), pageStack.end(), pageNumber) 
+          == pageStack.end())
+         pageStack.push_back (pageNumber);
+   }
+
+   void addMissingPageToFrame (int pageNumber)
+   {
+      if (numFrames >= getNumSlots ())
+         replacePageInFullFrame(pageNumber);
+      else
+         pageFrame[numFrames++] = pageNumber;
    }
 
    /****************************************************
@@ -41,20 +91,23 @@ public:
    void run(int pageNumber)
    {
       /////////////// YOUR CODE HERE ////////////////////
+      addPageToStack_noDuplicates(pageNumber);
 
-      // to place "pageNumber" in page 0
-      pageFrame[0] = pageNumber;
+      moveReferencePageToBack(pageNumber);
 
-      // for no page fault
-      // PageReplacementAlgorithm::record(pageNumber, false /*no fault*/);
+      if (pageNumberInFrame(pageNumber)) return;
 
+      addMissingPageToFrame(pageNumber);
+      
       // for a page fault
-      PageReplacementAlgorithm::record(pageNumber, true /*page fault*/);
-      return;      
+      record(pageNumber, true /*page fault*/);
    }
 
 private:
    //////////////////// YOUR CODE HERE //////////////////////
+   vector<int> pageStack;
+   int iNextVictim;
+   int numFrames;
 };
 
 #endif // PR_LRU

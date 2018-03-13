@@ -2,7 +2,7 @@
 * Component:
 *    Page Replacement Second Chance
 * Author:
-*    <your name>
+*    James Palmer
 * Summary: 
 *    This is the DERRIVED class to implement Second
 ************************************************************************/
@@ -13,7 +13,28 @@
 #include "pr.h"   // for the PageReplacementAlgorithm base-class
 
 #include <iostream>
+#include <algorithm>
+#include <map>
 using namespace std;
+
+struct PageReference
+{
+   PageReference (const int page, const int references)
+      : page(page),
+        references(references)
+   {}
+   int page, references;
+
+   friend bool operator== (const PageReference & lhs, int rhs)
+   {
+      return lhs.page == rhs;
+   }
+
+   friend bool operator!= (const PageReference & lhs, int rhs)
+   {
+      return !(lhs == rhs);
+   }
+};
 
 /****************************************************
  * Second Chance
@@ -30,6 +51,16 @@ public:
    PageReplacementSecond(int numSlots) : PageReplacementAlgorithm(numSlots)
    {
       //////////////////// YOUR CODE HERE //////////////////////
+      iNextVictim = 0;
+      numFrames = 0;
+   }
+
+   void addPageToStack_noDuplicates (int pageNumber)
+   {
+
+      if (find (pageStackReferences.begin (), pageStackReferences.end (), pageNumber)
+         == pageStackReferences.end ())
+         pageStackReferences.push_back(PageReference(pageNumber, 1));
    }
 
    /****************************************************
@@ -42,7 +73,8 @@ public:
    void run(int pageNumber)
    {
       /////////////// YOUR CODE HERE ////////////////////
-
+      addPageToStack_noDuplicates (pageNumber);
+      
       // to place "pageNumber" in page 0
       pageFrame[0] = pageNumber;
 
@@ -50,12 +82,14 @@ public:
       // PageReplacementAlgorithm::record(pageNumber, false /*no fault*/);
 
       // for a page fault
-      PageReplacementAlgorithm::record(pageNumber, true /*page fault*/);
-      return;
+      record(pageNumber, true /*page fault*/);
    }
 
 private:
    //////////////////// YOUR CODE HERE //////////////////////
+   vector<PageReference> pageStackReferences;
+   int iNextVictim;
+   int numFrames;
 };
 
 #endif // PR_SECOND

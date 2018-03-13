@@ -1,9 +1,9 @@
 /***********************************************************************
 * Program:
 *    Lab 10: Page Replacement Lab
-*    <your instructor>, CS 345
+*    Brother Ball, CS 345
 * Author:
-*    <your name>
+*    James Palmer
 * Summary: 
 *    This is the driver program to exercise the page replacement algorithm
 *
@@ -103,7 +103,7 @@ int main()
    
    // read the process info from a file
    list <int> referenceString = readReferenceString();
-   if (referenceString.size() == 0)
+   if (referenceString.empty())
       return 1;
 
    // select the page replacement algorithm

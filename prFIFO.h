@@ -2,7 +2,7 @@
 * Component:
 *    Page Replacement FIFO
 * Author:
-*    <your name here>
+*    James Palmer
 * Summary: 
 *    This is the DERRIVED class to implement the FIFO algorithm
 ************************************************************************/
@@ -13,6 +13,7 @@
 #include "pr.h"   // for the PageReplacementAlgorithm base-class
 
 #include <iostream>
+#include <queue>
 using namespace std;
 
 /****************************************************
@@ -29,6 +30,26 @@ public:
    PageReplacementFIFO(int numSlots) : PageReplacementAlgorithm(numSlots)
    {
       //////////////// YOUR CODE HERE ////////////////////
+      iNextVictim = 0;
+   }
+
+   bool ifPageInFrame (int pageNumber)
+   {
+      for (int i = 0; i < getNumSlots(); ++i)
+      {
+         if (pageFrame[i] == pageNumber)
+         {
+            record (pageNumber, false /*no fault*/);
+            return true;
+         }
+      }
+      return false;
+   }
+
+   void addMissingPageToFrame (int pageNumber)
+   {
+      pageFrame[iNextVictim] = pageNumber;
+      iNextVictim = (iNextVictim + 1) % getNumSlots();
    }
 
    /****************************************************
@@ -41,20 +62,16 @@ public:
    void run(int pageNumber)
    {
       /////////////// YOUR CODE HERE ////////////////////
+      if (ifPageInFrame(pageNumber)) return;
 
-      // to place "pageNumber" in page 0
-      pageFrame[0] = pageNumber;
-      
-      // for no page fault
-      // PageReplacementAlgorithm::record(pageNumber, false /*no fault*/);
+      addMissingPageToFrame(pageNumber);
 
-      // for a page fault
-      PageReplacementAlgorithm::record(pageNumber, true /*page fault*/);
-      return;
+      record(pageNumber, true /*page fault*/);
    }
 
 private:
    //////////////////// YOUR CODE HERE //////////////////////
+   int iNextVictim;
 };
 
 #endif // PR_BASIC
