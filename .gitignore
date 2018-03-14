@@ -286,3 +286,12 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+CMakeLists.txt
+.vcxproj
+*.vcxproj
+*.vcxproj.filters
+*.out
+cmak-build-debug/
+cmak-build-debug/*
+cmake-build-debug/
+test*.txt
