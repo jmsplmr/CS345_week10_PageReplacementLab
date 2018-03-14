@@ -12,8 +12,17 @@
 #include <iostream>   // for the insertion operator
 #include <cassert>    // because I am paranoid
 #include "pr.h"       // for the PageReplacementAlgorithm class definition
+#include "prBasic.h"
+#include "prFIFO.h"
+#include "prLRU.h"
+#include "prSecond.h"
 
-using namespace std;
+PageReplacementAlgorithm::PageReplacementAlgorithm (int numSlots)
+   : numSlots(numSlots),
+     numFaults(0)
+{
+   pageFrame.resize(numSlots, -1);
+}
 
 /**************************************************
  * RECORD
@@ -31,21 +40,26 @@ void PageReplacementAlgorithm::record(int pageNumber, bool fault)
    historyF.push_back (fault);
    numFaults += (fault ? 1 : 0);
 }
-   
+
+int PageReplacementAlgorithm::getNumSlots () const
+{
+   return numSlots;
+}
+
 /**********************************************
  * DISPLAY
  * Display the history of all the executions
  **********************************************/
-ostream & operator << (ostream & out, const PageReplacementAlgorithm & rhs)
+std::ostream & operator << (std::ostream & out, const PageReplacementAlgorithm & rhs)
 {
    int num = rhs.historyRS.size();
    assert(rhs.historyPF.size() == rhs.historyRS.size());
 
    // display the top row first
-   list <int> :: const_iterator itRS;
+   std::list <int> :: const_iterator itRS;
    for (itRS = rhs.historyRS.begin(); itRS != rhs.historyRS.end(); ++itRS)
       out << *itRS << ' ';
-   out << endl;
+   out << std::endl;
 
    // display the top bar
    for (int i = 0; i < num; i++)
@@ -55,7 +69,7 @@ ostream & operator << (ostream & out, const PageReplacementAlgorithm & rhs)
    // display each slot in turn
    for (int iSlot = 0; iSlot < rhs.numSlots; iSlot++)
    {
-      list < std::vector <int> > :: const_iterator itPF;
+      std::list < std::vector <int> > :: const_iterator itPF;
       for (itPF = rhs.historyPF.begin(); itPF != rhs.historyPF.end(); ++itPF)
       {
          out << '|';
@@ -73,13 +87,13 @@ ostream & operator << (ostream & out, const PageReplacementAlgorithm & rhs)
    out << "+\n";
 
    // display the history of the page faults
-   list <bool> :: const_iterator itF;
+   std::list <bool> :: const_iterator itF;
    for (itF = rhs.historyF.begin(); itF != rhs.historyF.end(); ++itF)
       out << ' ' << (*itF ? 'F' : ' ');
-   out << endl;
+   out << std::endl;
 
    // display the hit ratio
-   out << "Hit ratio: " << (num - rhs.numFaults) << '/' << num << endl;
+   out << "Hit ratio: " << (num - rhs.numFaults) << '/' << num << std::endl;
 
    return out;
 }

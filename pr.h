@@ -7,16 +7,11 @@
 *    This is the base-class that enables various
 *    page replacement algorithms
 ************************************************************************/
-
-#ifndef PR_H
-#define PR_H
+#pragma once
 
 #include <string>     // for the name of the process
-#include <iostream>   // for the insertion operator
-#include <iomanip>    // for setw
 #include <vector>     // for VECTOR
 #include <list>       // for LIST
-#include <cassert>    // because I am paranoid
 
 enum PageReplacementType { BASIC, FIFO, LRU, SECOND };
 #define PR_NONE -1
@@ -29,24 +24,21 @@ class PageReplacementAlgorithm
 {
  public:
    // only constructor: how many slots are in the pageFrame/
-   PageReplacementAlgorithm(int numSlots) : numSlots(numSlots), numFaults(0)
-   {
-      pageFrame.resize(numSlots, -1);
-   }
+   PageReplacementAlgorithm (int);
 
    // this is the function you will implement: what will happen
    // when pageNumber gets selected next?
-   virtual void run(int pageNumber) = 0;
+   virtual void run(int) = 0;
 
    // record the results
-   void record(int pageNumber, bool pageFault);
+   void record(int, bool);
    
    // display the status of the page frames
    friend std::ostream & operator <<
-      (std::ostream & out, const PageReplacementAlgorithm & rhs);
+      (std::ostream & out, const PageReplacementAlgorithm &);
 
    // how many slots are currently in use?
-   int getNumSlots() const { return numSlots; }
+   int getNumSlots () const;
 
    // the derived classes have access to and are expected to
    // modify pageFrame directly
@@ -61,11 +53,4 @@ private:
    int numFaults;                            // total number of faults
 };
 
-#include "prBasic.h"
-#include "prFIFO.h"
-#include "prLRU.h"
-#include "prSecond.h"
-
 PageReplacementAlgorithm * prFactory(PageReplacementType prt, int numSlots);
-
-#endif // PR_H

@@ -13,8 +13,8 @@
 ##############################################################
 # The main rule
 ##############################################################
-a.out: lab10.o pr.o
-	g++ -o a.out lab10.o pr.o
+a.out: lab10.o pr.o prFIFO.o prLRU.o prSecond.o
+	g++ -o a.out lab10.o pr.o prFIFO.o prLRU.o prSecond.o
 	tar -cf lab10.tar makefile *.cpp *.h
 
 ##############################################################
@@ -23,8 +23,17 @@ a.out: lab10.o pr.o
 lab10.o: lab10.cpp pr.h
 	g++ -c lab10.cpp
 
-pr.o: pr*.h pr.cpp pr.h
+pr.o: pr.cpp pr.h
 	g++ -c pr.cpp
+
+prFIFO.o: prFIFO.cpp prFIFO.h
+	g++ -c prFIFO.cpp
+
+prLRU.o: prLRU.h prLRU.cpp 
+	g++ -c prLRU.cpp
+
+prSecond.o: prSecond.cpp prSecond.h
+	g++ -c prSecond.cpp
 
 clean:
 	rm *.o a.out

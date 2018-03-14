@@ -6,34 +6,17 @@
 * Summary: 
 *    This is the DERRIVED class to implement Second
 ************************************************************************/
-
-#ifndef PR_SECOND
-#define PR_SECOND
+#pragma once
 
 #include "pr.h"   // for the PageReplacementAlgorithm base-class
 
-#include <iostream>
-#include <algorithm>
-#include <map>
-using namespace std;
-
 struct PageReference
 {
-   PageReference (const int page, const int references)
-      : page(page),
-        references(references)
-   {}
    int page, references;
 
-   friend bool operator== (const PageReference & lhs, int rhs)
-   {
-      return lhs.page == rhs;
-   }
+   PageReference (int, int);
 
-   friend bool operator!= (const PageReference & lhs, int rhs)
-   {
-      return !(lhs == rhs);
-   }
+   friend bool operator== (const PageReference &, int);
 };
 
 /****************************************************
@@ -43,25 +26,13 @@ struct PageReference
  ***************************************************/
 class PageReplacementSecond : public PageReplacementAlgorithm
 {
-public:
+   public:
    /*****************************************************
     * CONSTRUCTOR
     * initialize the data structures specific to Second
     *****************************************************/
-   PageReplacementSecond(int numSlots) : PageReplacementAlgorithm(numSlots)
-   {
-      //////////////////// YOUR CODE HERE //////////////////////
-      iNextVictim = 0;
-      numFrames = 0;
-   }
-
-   void addPageToStack_noDuplicates (int pageNumber)
-   {
-
-      if (find (pageStackReferences.begin (), pageStackReferences.end (), pageNumber)
-         == pageStackReferences.end ())
-         pageStackReferences.push_back(PageReference(pageNumber, 1));
-   }
+   PageReplacementSecond (int numSlots);
+   
 
    /****************************************************
     * RUN
@@ -70,26 +41,19 @@ public:
     * from memory. You are to assign that page to a "pageFrame"
     * and then call the base-class to record the results.
     ***************************************************/
-   void run(int pageNumber)
-   {
-      /////////////// YOUR CODE HERE ////////////////////
-      addPageToStack_noDuplicates (pageNumber);
-      
-      // to place "pageNumber" in page 0
-      pageFrame[0] = pageNumber;
+   void run (int pageNumber);
 
-      // for no page fault
-      // PageReplacementAlgorithm::record(pageNumber, false /*no fault*/);
-
-      // for a page fault
-      record(pageNumber, true /*page fault*/);
-   }
-
-private:
+   private:
    //////////////////// YOUR CODE HERE //////////////////////
-   vector<PageReference> pageStackReferences;
+   std::vector<PageReference> pageStackReferences;
    int iNextVictim;
+   int nextFrame;
    int numFrames;
-};
 
-#endif // PR_SECOND
+   void addPageToStack_noDuplicates (int);
+   void addReferenceToPage (int);
+   bool pageNumberInFrame (int);
+   bool advanceQueue ();
+   void replacePageInFullFrame (int);
+   void addMissingPageToFrame (int);
+};

@@ -17,7 +17,6 @@
 #include <cassert>
 #include <list>
 #include "pr.h"
-using namespace std;
 
 /*****************************************************************
  * MENU
@@ -27,22 +26,22 @@ using namespace std;
 PageReplacementType menu()
 {
    // present a list of options
-   cout << "Please select one of the following page replacement algorithms:\n";
-   cout << "  1. Basic Page Replacement\n";
-   cout << "  2. First-In-First-Out\n";
-   cout << "  3. Least Recently Used\n";
-   cout << "  4. Second Chance\n";
+   std::cout << "Please select one of the following page replacement algorithms:\n";
+   std::cout << "  1. Basic Page Replacement\n";
+   std::cout << "  2. First-In-First-Out\n";
+   std::cout << "  3. Least Recently Used\n";
+   std::cout << "  4. Second Chance\n";
 
    // prompt the user for a selection
-   assert(cin.good());
+   assert(std::cin.good());
    int input = 1;
-   cout << "> ";
-   cin  >> input;
-   while (cin.fail() || input < 1 || input > 4)
+   std::cout << "> ";
+   std::cin  >> input;
+   while (std::cin.fail() || input < 1 || input > 4)
    {
-      cout << "Error, invalid input. "
+      std::cout << "Error, invalid input. "
            << "Please select a number between 1 and 4: ";
-      cin  >> input;
+      std::cin  >> input;
    }
 
    // return the type
@@ -61,20 +60,20 @@ PageReplacementType menu()
  * Example:
  *     1 0 2 2  1 7 6 7  0 1 2 0  3 0 4 5  1 5 2 4  5 6 7 6  7 2 4 2  7 3 3 2 
  *********************************************************************/
-list <int> readReferenceString()
+std::list <int> readReferenceString()
 {
-   list <int> output;
+   std::list <int> output;
    
    // prompt for filename
    char fileName[256];
-   cout << "What is the filename of the process file? ";
-   cin  >> fileName;
+   std::cout << "What is the filename of the process file? ";
+   std::cin  >> fileName;
 
    // open the file
-   ifstream fin(fileName);
+   std::ifstream fin(fileName);
    if (fin.fail())
    {
-      cout << "Unable to open file '"
+      std::cout << "Unable to open file '"
            << fileName
            << "', exiting.\n";
       return output;
@@ -98,11 +97,11 @@ int main()
 {
    // determine the number of pages in each frame
    int numSlots = 3;
-   cout << "How many slots: ";
-   cin  >> numSlots;
+   std::cout << "How many slots: ";
+   std::cin  >> numSlots;
    
    // read the process info from a file
-   list <int> referenceString = readReferenceString();
+   std::list <int> referenceString = readReferenceString();
    if (referenceString.empty())
       return 1;
 
@@ -110,12 +109,12 @@ int main()
    PageReplacementAlgorithm * p = prFactory(menu(), numSlots);
 
    // run the simulation
-   list <int> :: iterator it;
+   std::list <int> :: iterator it;
    for (it = referenceString.begin(); it != referenceString.end(); ++it)
       p->run(*it);
 
    // display the results
-   cout << *p;
+   std::cout << *p;
 
    // make like a tree
    delete p;   

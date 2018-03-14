@@ -6,14 +6,10 @@
 * Summary: 
 *    This is the DERRIVED class to implement LRU
 ************************************************************************/
+#pragma once
 
-#ifndef PR_LRU
-#define PR_LRU
-
-#include <iostream>
-#include <algorithm>
-using namespace std;
-
+#include <vector>
+#include "pr.h"
 /****************************************************
  * SRL
  * The least-recently-used page replacement algorithm
@@ -25,61 +21,7 @@ public:
     * CONSTRUCTOR
     * initialize the data structures specific to LRU
     *****************************************************/
-   PageReplacementLRU(int numSlots) : PageReplacementAlgorithm(numSlots)
-   {
-      //////////////// YOUR CODE HERE ////////////////////  
-      iNextVictim = 0;
-      numFrames = 0;
-   }
-
-   void replacePageInFullFrame (int pageNumber)
-   {
-      for (vector<int>::iterator it = pageStack.begin ();
-           it != pageStack.end (); ++it)
-         for (int i = 0; i < getNumSlots (); i++)
-            if (pageFrame[i] == *it) 
-            {
-               pageFrame[i] = pageNumber;
-               return;
-            }
-   }
-
-   bool pageNumberInFrame (int pageNumber)
-   {
-      for (int i = 0; i < getNumSlots (); i++)
-         if (pageFrame[i] == pageNumber)
-         {
-            record (pageNumber, false /*no fault*/);
-            return true;
-         }
-      return false;
-   }
-
-   void moveReferencePageToBack (int pageNumber)
-   {
-      for (vector<int>::iterator it = pageStack.begin(); it != pageStack.end(); ++it )
-         if (*it == pageNumber)
-         {
-            pageStack.erase (it);
-            pageStack.push_back (pageNumber);
-            break;
-         }
-   }
-
-   void addPageToStack_noDuplicates (int pageNumber)
-   {
-      if (find(pageStack.begin(), pageStack.end(), pageNumber) 
-          == pageStack.end())
-         pageStack.push_back (pageNumber);
-   }
-
-   void addMissingPageToFrame (int pageNumber)
-   {
-      if (numFrames >= getNumSlots ())
-         replacePageInFullFrame(pageNumber);
-      else
-         pageFrame[numFrames++] = pageNumber;
-   }
+   PageReplacementLRU (int);
 
    /****************************************************
     * RUN
@@ -88,26 +30,17 @@ public:
     * from memory. You are to assign that page to a "pageFrame"
     * and then call the base-class to record the results.
     ***************************************************/
-   void run(int pageNumber)
-   {
-      /////////////// YOUR CODE HERE ////////////////////
-      addPageToStack_noDuplicates(pageNumber);
-
-      moveReferencePageToBack(pageNumber);
-
-      if (pageNumberInFrame(pageNumber)) return;
-
-      addMissingPageToFrame(pageNumber);
-      
-      // for a page fault
-      record(pageNumber, true /*page fault*/);
-   }
+   void run (int);
 
 private:
    //////////////////// YOUR CODE HERE //////////////////////
-   vector<int> pageStack;
-   int iNextVictim;
+   std::vector<int> pageStack;
    int numFrames;
+
+   void replacePageInFullFrame (int);
+   bool pageNumberInFrame (int);
+   void moveReferencePageToBack (int);
+   void addPageToStack_noDuplicates (int);
+   void addMissingPageToFrame (int);
 };
 
-#endif // PR_LRU

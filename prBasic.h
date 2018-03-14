@@ -6,17 +6,13 @@
 * Summary: 
 *    This is the DERRIVED class to implement a basic page replacement algorithm
 ************************************************************************/
+#pragma once
 
-#ifndef PR_BASIC
-#define PR_BASIC
-
-#include <cassert>    // for ASSERT()
 #include <cstdlib>    // for RAND() and SRAND()
-#include <time.h>     // for TIME()
+#include <ctime>     // for TIME()
 #include "pr.h"
 
 #include <iostream>
-using namespace std;
 
 /****************************************************
  * BASIC
@@ -29,11 +25,7 @@ public:
     * CONSTRUCTOR
     * initialize the data structures specific to BASIC
     *****************************************************/
-   PageReplacementBasic(int numSlots) : PageReplacementAlgorithm(numSlots)
-   {
-      // seed the random number generator
-      srand (time(NULL));
-   }
+   PageReplacementBasic (int);
 
    /****************************************************
     * RUN
@@ -42,28 +34,35 @@ public:
     * from memory. You are to assign that page to a "pageFrame"
     * and then call the base-class to record the results.
     ***************************************************/
-   void run(int pageNumber)
-   {
-      cerr << "Find page\n";
-      // is pageNumber currently being used?
-      for (int i = 0; i < getNumSlots(); i++)
-         if (pageFrame[i] == pageNumber)
-         {
-            record(pageNumber, false /*no fault*/);
-            return;
-         }
-
-      // select the next victim
-      int iNextVictim = rand() % getNumSlots();
-      pageFrame[iNextVictim] = pageNumber;
-      
-      // call the record method so everything can be reported
-      record(pageNumber, true /*page fault*/);
-   }
+   void run (int);
 
 private:
    // which frame is selected to be next?
    int iNextVictim;
 };
 
-#endif // PR_BASIC
+inline PageReplacementBasic::PageReplacementBasic (int numSlots)
+   : PageReplacementAlgorithm(numSlots)
+{
+   // seed the random number generator
+   srand(time(NULL));
+}
+
+inline void PageReplacementBasic::run (int pageNumber)
+{
+   std::cerr << "Find page\n";
+   // is pageNumber currently being used?
+   for (int i = 0; i < getNumSlots(); i++)
+      if (pageFrame[i] == pageNumber)
+      {
+         record(pageNumber, false /*no fault*/);
+         return;
+      }
+
+   // select the next victim
+   int iNextVictim = rand() % getNumSlots();
+   pageFrame[iNextVictim] = pageNumber;
+
+   // call the record method so everything can be reported
+   record(pageNumber, true /*page fault*/);
+}
