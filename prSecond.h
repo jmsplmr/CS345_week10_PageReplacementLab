@@ -22,8 +22,7 @@ class PageReplacementSecond : public PageReplacementAlgorithm
     * CONSTRUCTOR
     * initialize the data structures specific to Second
     *****************************************************/
-   PageReplacementSecond (int numSlots);
-   
+   PageReplacementSecond (int);
 
    /****************************************************
     * RUN
@@ -32,10 +31,20 @@ class PageReplacementSecond : public PageReplacementAlgorithm
     * from memory. You are to assign that page to a "pageFrame"
     * and then call the base-class to record the results.
     ***************************************************/
-   void run (int pageNumber);
+   void run (int);
 
    private:
    //////////////////// YOUR CODE HERE //////////////////////
-      std::vector<int> history;
-      int pageReference;
+   std::vector<int> references;
+   int page;
+
+   void findVictim ();
+   bool pageInFrameAndReferenced (int);
+   void setPageInPageFrame (int);
+
+   void advancePageRefSlot ();
+   void addReferenceToPage (int);
+   void clearReferenceToSlot ();
+   bool pagesHaveReferences ();
+   bool isPageInFrame (int, int);
 };

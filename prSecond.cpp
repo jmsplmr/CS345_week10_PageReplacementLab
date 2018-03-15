@@ -1,35 +1,73 @@
 #include "prSecond.h"
-#include <algorithm>
 
 PageReplacementSecond::PageReplacementSecond (int numSlots)
    : PageReplacementAlgorithm(numSlots)
 {
    //////////////////// YOUR CODE HERE //////////////////////
-   pageReference = 0;
-   history = std::vector<int> (numSlots);
+   page = 0;
+   references = std::vector<int> (numSlots);
+}
+
+void PageReplacementSecond::advancePageRefSlot ()
+{
+   page = (page + 1) % getNumSlots ();
+}
+
+void PageReplacementSecond::addReferenceToPage (int page)
+{
+   references.at(page) = 1;
+}
+
+void PageReplacementSecond::clearReferenceToSlot ()
+{
+   references.at(page) = 0;
+}
+
+bool PageReplacementSecond::pagesHaveReferences ()
+{
+   return references.at(page) == 1;
+}
+
+bool PageReplacementSecond::isPageInFrame (int pageNumber, int i)
+{
+   return pageFrame.at(i) == pageNumber;
+}
+
+void PageReplacementSecond::findVictim ()
+{
+   while (pagesHaveReferences())
+   {
+      clearReferenceToSlot();
+      advancePageRefSlot();
+   }
+}
+
+bool PageReplacementSecond::pageInFrameAndReferenced (int pageNumber)
+{
+   for (int p = 0; p < getNumSlots (); p++)
+      if (isPageInFrame(pageNumber, p))
+      {
+         addReferenceToPage (p);
+         record (pageNumber, false);
+         return true;
+      }
+   return false;
+}
+
+void PageReplacementSecond::setPageInPageFrame (int pageNumber)
+{
+   pageFrame.at(page) = pageNumber;
 }
 
 void PageReplacementSecond::run (int pageNumber)
 {
    /////////////// YOUR CODE HERE ////////////////////
-   // is pageNumber currently being used?
-   for (int i = 0; i < getNumSlots (); i++)
-      if (pageFrame.at(i) == pageNumber)
-      {
-         history.at(i) = 1; //Gives the current slot a second chance
-         record (pageNumber, false /*no fault*/);
-         return;
-      }
+   if (pageInFrameAndReferenced(pageNumber)) return;
+   findVictim();
+
+   addReferenceToPage(page);
+   setPageInPageFrame (pageNumber);
+   advancePageRefSlot ();
    
-   while (history.at(pageReference) == 1)
-   {
-      history.at(pageReference) = 0;
-      pageReference = (pageReference + 1) % getNumSlots ();
-   }
-
-   pageFrame.at(pageReference) = pageNumber;
-   history.at(pageReference) = 1;
-   pageReference = (pageReference + 1) % getNumSlots ();
-
-   record (pageNumber, true /*page fault*/);
+   record (pageNumber, true);
 }
