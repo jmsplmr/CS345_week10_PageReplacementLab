@@ -5,9 +5,9 @@
 # Author:
 #     James Palmer
 # Summary:
-#     
+#     Pageframe algorithms for choosing which frame to replace
 # Time:
-#     
+#     2:30
 ###############################################################
 
 ##############################################################
