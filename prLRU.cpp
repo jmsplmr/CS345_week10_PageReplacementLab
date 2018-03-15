@@ -1,10 +1,9 @@
-
 #include "prLRU.h"
 #include <vector>
 #include <algorithm>
 
 PageReplacementLRU::PageReplacementLRU (int numSlots)
-   : PageReplacementAlgorithm (numSlots)
+   : PageReplacementAlgorithm(numSlots)
 {
    //////////////// YOUR CODE HERE ////////////////////
    numFrames = 0;
@@ -13,23 +12,24 @@ PageReplacementLRU::PageReplacementLRU (int numSlots)
 void PageReplacementLRU::run (int pageNumber)
 {
    /////////////// YOUR CODE HERE ////////////////////
-   addPageToStack_noDuplicates (pageNumber);
+   addPageToStack_noDuplicates(pageNumber);
 
-   moveReferencePageToBack (pageNumber);
+   moveReferencePageToBack(pageNumber);
 
-   if (pageNumberInFrame (pageNumber))
+   if (pageNumberInFrame(pageNumber))
       return;
 
-   addMissingPageToFrame (pageNumber);
+   addMissingPageToFrame(pageNumber);
 
    // for a page fault
-   record (pageNumber, true);
+   record(pageNumber, true);
 }
 
 void PageReplacementLRU::replacePageInFullFrame (int pageNumber)
 {
-   for (std::vector<int>::iterator it = pageStack.begin (); it != pageStack.end (); ++it)
-      for (int i = 0; i < getNumSlots (); i++)
+   for (std::vector<int>::iterator it = pageStack.begin();
+        it != pageStack.end(); ++it)
+      for (int i = 0; i < getNumSlots(); i++)
          if (pageFrame[i] == *it)
          {
             pageFrame[i] = pageNumber;
@@ -39,10 +39,10 @@ void PageReplacementLRU::replacePageInFullFrame (int pageNumber)
 
 bool PageReplacementLRU::pageNumberInFrame (int pageNumber)
 {
-   for (int i = 0; i < getNumSlots (); i++)
+   for (int i = 0; i < getNumSlots(); i++)
       if (pageFrame[i] == pageNumber)
       {
-         record (pageNumber, false /*no fault*/);
+         record(pageNumber, false /*no fault*/);
          return true;
       }
    return false;
@@ -50,27 +50,28 @@ bool PageReplacementLRU::pageNumberInFrame (int pageNumber)
 
 void PageReplacementLRU::moveReferencePageToBack (int pageNumber)
 {
-   for (std::vector<int>::iterator it = pageStack.begin (); it != pageStack.end (); ++
-      it)
+   for (std::vector<int>::iterator it = pageStack.begin();
+        it != pageStack.end(); ++
+        it)
       if (*it == pageNumber)
       {
-         pageStack.erase (it);
-         pageStack.push_back (pageNumber);
+         pageStack.erase(it);
+         pageStack.push_back(pageNumber);
          break;
       }
 }
 
 void PageReplacementLRU::addPageToStack_noDuplicates (int pageNumber)
 {
-   if (find (pageStack.begin (), pageStack.end (), pageNumber)
-      == pageStack.end ())
-      pageStack.push_back (pageNumber);
+   if (find(pageStack.begin(), pageStack.end(), pageNumber)
+       == pageStack.end())
+      pageStack.push_back(pageNumber);
 }
 
 void PageReplacementLRU::addMissingPageToFrame (int pageNumber)
 {
-   if (numFrames >= getNumSlots ())
-      replacePageInFullFrame (pageNumber);
+   if (numFrames >= getNumSlots())
+      replacePageInFullFrame(pageNumber);
    else
       pageFrame[numFrames++] = pageNumber;
 }

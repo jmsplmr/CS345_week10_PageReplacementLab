@@ -5,12 +5,12 @@ PageReplacementSecond::PageReplacementSecond (int numSlots)
 {
    //////////////////// YOUR CODE HERE //////////////////////
    page = 0;
-   references = std::vector<int> (numSlots);
+   references = std::vector<int>(numSlots);
 }
 
 void PageReplacementSecond::advancePageRefSlot ()
 {
-   page = (page + 1) % getNumSlots ();
+   page = (page + 1) % getNumSlots();
 }
 
 void PageReplacementSecond::addReferenceToPage (int page)
@@ -44,11 +44,11 @@ void PageReplacementSecond::findVictim ()
 
 bool PageReplacementSecond::pageInFrameAndReferenced (int pageNumber)
 {
-   for (int p = 0; p < getNumSlots (); p++)
+   for (int p = 0; p < getNumSlots(); p++)
       if (isPageInFrame(pageNumber, p))
       {
-         addReferenceToPage (p);
-         record (pageNumber, false);
+         addReferenceToPage(p);
+         record(pageNumber, false);
          return true;
       }
    return false;
@@ -62,12 +62,13 @@ void PageReplacementSecond::setPageInPageFrame (int pageNumber)
 void PageReplacementSecond::run (int pageNumber)
 {
    /////////////// YOUR CODE HERE ////////////////////
-   if (pageInFrameAndReferenced(pageNumber)) return;
+   if (pageInFrameAndReferenced(pageNumber))
+      return;
    findVictim();
 
    addReferenceToPage(page);
-   setPageInPageFrame (pageNumber);
-   advancePageRefSlot ();
-   
-   record (pageNumber, true);
+   setPageInPageFrame(pageNumber);
+   advancePageRefSlot();
+
+   record(pageNumber, true);
 }

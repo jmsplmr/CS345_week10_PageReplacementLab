@@ -10,13 +10,14 @@
 
 #include <vector>
 #include "pr.h"
+
 /****************************************************
  * SRL
  * The least-recently-used page replacement algorithm
  ***************************************************/
-class PageReplacementLRU: public PageReplacementAlgorithm
+class PageReplacementLRU : public PageReplacementAlgorithm
 {
-public:
+   public:
    /*****************************************************
     * CONSTRUCTOR
     * initialize the data structures specific to LRU
@@ -32,7 +33,7 @@ public:
     ***************************************************/
    void run (int);
 
-private:
+   private:
    //////////////////// YOUR CODE HERE //////////////////////
    std::vector<int> pageStack;
    int numFrames;
@@ -43,4 +44,3 @@ private:
    void addPageToStack_noDuplicates (int);
    void addMissingPageToFrame (int);
 };
-
