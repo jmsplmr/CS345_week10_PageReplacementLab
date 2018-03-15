@@ -10,14 +10,14 @@
 
 #include "pr.h"   // for the PageReplacementAlgorithm base-class
 
-struct PageReference
-{
-   int page, references;
-
-   PageReference (int, int);
-
-   friend bool operator== (const PageReference &, int);
-};
+//struct PageReference
+//{
+//   int page, references;
+//
+//   PageReference (int, int);
+//
+//   friend bool operator== (const PageReference &, int);
+//};
 
 /****************************************************
  * Second Chance
@@ -45,15 +45,7 @@ class PageReplacementSecond : public PageReplacementAlgorithm
 
    private:
    //////////////////// YOUR CODE HERE //////////////////////
-   std::vector<PageReference> pageStackReferences;
-   int iNextVictim;
-   int nextFrame;
-   int numFrames;
-
-   void addPageToStack_noDuplicates (int);
-   void addReferenceToPage (int);
-   bool pageNumberInFrame (int);
-   bool advanceQueue ();
-   void replacePageInFullFrame (int);
-   void addMissingPageToFrame (int);
+      int numSlots;
+      int *history;
+      int pageReference;
 };
