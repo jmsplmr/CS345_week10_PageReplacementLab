@@ -3,7 +3,7 @@
 *    Page Replacement
 * Author:
 *    Br. Helfrich
-* Summary: 
+* Summary:
 *    This will implement a few helper functions.
 *
 *    Note that you do not need to change this to any capacity
@@ -18,23 +18,23 @@
 #include "prSecond.h"
 
 PageReplacementAlgorithm::PageReplacementAlgorithm (int numSlots)
-   : numSlots(numSlots),
-     numFaults(0)
+   : numSlots (numSlots),
+   numFaults (0)
 {
-   pageFrame.resize(numSlots, -1);
+   pageFrame.resize (numSlots, -1);
 }
 
 /**************************************************
  * RECORD
  * Record the result of a single page request
  **************************************************/
-void PageReplacementAlgorithm::record(int pageNumber, bool fault)
+void PageReplacementAlgorithm::record (int pageNumber, bool fault)
 {
    // record the entire page frame
-   historyPF.push_back(pageFrame);
+   historyPF.push_back (pageFrame);
 
    // record which page number was requested at this moment in time
-   historyRS.push_back(pageNumber);
+   historyRS.push_back (pageNumber);
 
    // record whether there was a page fult
    historyF.push_back (fault);
@@ -52,12 +52,12 @@ int PageReplacementAlgorithm::getNumSlots () const
  **********************************************/
 std::ostream & operator << (std::ostream & out, const PageReplacementAlgorithm & rhs)
 {
-   int num = rhs.historyRS.size();
-   assert(rhs.historyPF.size() == rhs.historyRS.size());
+   int num = rhs.historyRS.size ();
+   assert (rhs.historyPF.size () == rhs.historyRS.size ());
 
    // display the top row first
-   std::list <int> :: const_iterator itRS;
-   for (itRS = rhs.historyRS.begin(); itRS != rhs.historyRS.end(); ++itRS)
+   std::list <int> ::const_iterator itRS;
+   for (itRS = rhs.historyRS.begin (); itRS != rhs.historyRS.end (); ++itRS)
       out << *itRS << ' ';
    out << std::endl;
 
@@ -69,8 +69,8 @@ std::ostream & operator << (std::ostream & out, const PageReplacementAlgorithm &
    // display each slot in turn
    for (int iSlot = 0; iSlot < rhs.numSlots; iSlot++)
    {
-      std::list < std::vector <int> > :: const_iterator itPF;
-      for (itPF = rhs.historyPF.begin(); itPF != rhs.historyPF.end(); ++itPF)
+      std::list < std::vector <int> > ::const_iterator itPF;
+      for (itPF = rhs.historyPF.begin (); itPF != rhs.historyPF.end (); ++itPF)
       {
          out << '|';
          if (itPF->operator[](iSlot) == -1)
@@ -87,8 +87,8 @@ std::ostream & operator << (std::ostream & out, const PageReplacementAlgorithm &
    out << "+\n";
 
    // display the history of the page faults
-   std::list <bool> :: const_iterator itF;
-   for (itF = rhs.historyF.begin(); itF != rhs.historyF.end(); ++itF)
+   std::list <bool> ::const_iterator itF;
+   for (itF = rhs.historyF.begin (); itF != rhs.historyF.end (); ++itF)
       out << ' ' << (*itF ? 'F' : ' ');
    out << std::endl;
 
@@ -97,26 +97,26 @@ std::ostream & operator << (std::ostream & out, const PageReplacementAlgorithm &
 
    return out;
 }
-   
+
 /*****************************************************
  * Page Replacement FACTORY
  * Create an instance of a Page Replacement Algorihtm that implements
  * a specific algorithm
  *****************************************************/
-PageReplacementAlgorithm * prFactory(PageReplacementType prt, int numSlots)
+PageReplacementAlgorithm * prFactory (PageReplacementType prt, int numSlots)
 {
    switch (prt)
    {
-      case BASIC:
-         return new PageReplacementBasic (numSlots);
-      case FIFO:
-         return new PageReplacementFIFO  (numSlots);
-      case LRU:
-         return new PageReplacementLRU   (numSlots);
-      case SECOND:
-         return new PageReplacementSecond(numSlots);
+   case BASIC:
+      return new PageReplacementBasic (numSlots);
+   case FIFO:
+      return new PageReplacementFIFO (numSlots);
+   case LRU:
+      return new PageReplacementLRU (numSlots);
+   case SECOND:
+      return new PageReplacementSecond (numSlots);
    }
 
-   assert(false);
-   return new PageReplacementBasic(numSlots);   
+   assert (false);
+   return new PageReplacementBasic (numSlots);
 }

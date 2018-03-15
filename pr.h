@@ -3,7 +3,7 @@
 *    Page Replacement
 * Author:
 *    Br. Helfrich
-* Summary: 
+* Summary:
 *    This is the base-class that enables various
 *    page replacement algorithms
 ************************************************************************/
@@ -22,17 +22,17 @@ enum PageReplacementType { BASIC, FIFO, LRU, SECOND };
  ****************************************************/
 class PageReplacementAlgorithm
 {
- public:
+public:
    // only constructor: how many slots are in the pageFrame/
    PageReplacementAlgorithm (int);
 
    // this is the function you will implement: what will happen
    // when pageNumber gets selected next?
-   virtual void run(int) = 0;
+   virtual void run (int) = 0;
 
    // record the results
-   void record(int, bool);
-   
+   void record (int, bool);
+
    // display the status of the page frames
    friend std::ostream & operator <<
       (std::ostream & out, const PageReplacementAlgorithm &);
@@ -53,4 +53,4 @@ private:
    int numFaults;                            // total number of faults
 };
 
-PageReplacementAlgorithm * prFactory(PageReplacementType prt, int numSlots);
+PageReplacementAlgorithm * prFactory (PageReplacementType prt, int numSlots);

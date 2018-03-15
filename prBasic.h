@@ -3,7 +3,7 @@
 *    Page Replacement Basic
 * Author:
 *    Br. Helfrich
-* Summary: 
+* Summary:
 *    This is the DERRIVED class to implement a basic page replacement algorithm
 ************************************************************************/
 #pragma once
@@ -42,27 +42,27 @@ private:
 };
 
 inline PageReplacementBasic::PageReplacementBasic (int numSlots)
-   : PageReplacementAlgorithm(numSlots)
+   : PageReplacementAlgorithm (numSlots)
 {
    // seed the random number generator
-   srand(time(NULL));
+   srand (time (NULL));
 }
 
 inline void PageReplacementBasic::run (int pageNumber)
 {
    std::cerr << "Find page\n";
    // is pageNumber currently being used?
-   for (int i = 0; i < getNumSlots(); i++)
+   for (int i = 0; i < getNumSlots (); i++)
       if (pageFrame[i] == pageNumber)
       {
-         record(pageNumber, false /*no fault*/);
+         record (pageNumber, false /*no fault*/);
          return;
       }
 
    // select the next victim
-   int iNextVictim = rand() % getNumSlots();
+   int iNextVictim = rand () % getNumSlots ();
    pageFrame[iNextVictim] = pageNumber;
 
    // call the record method so everything can be reported
-   record(pageNumber, true /*page fault*/);
+   record (pageNumber, true /*page fault*/);
 }

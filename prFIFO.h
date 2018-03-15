@@ -3,7 +3,7 @@
 *    Page Replacement FIFO
 * Author:
 *    James Palmer
-* Summary: 
+* Summary:
 *    This is the DERRIVED class to implement the FIFO algorithm
 ************************************************************************/
 

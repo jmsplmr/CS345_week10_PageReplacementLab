@@ -3,7 +3,7 @@
 *    Page Replacement Second Chance
 * Author:
 *    James Palmer
-* Summary: 
+* Summary:
 *    This is the DERRIVED class to implement Second
 ************************************************************************/
 #pragma once
@@ -17,7 +17,7 @@
  ***************************************************/
 class PageReplacementSecond : public PageReplacementAlgorithm
 {
-   public:
+public:
    /*****************************************************
     * CONSTRUCTOR
     * initialize the data structures specific to Second
@@ -33,7 +33,7 @@ class PageReplacementSecond : public PageReplacementAlgorithm
     ***************************************************/
    void run (int);
 
-   private:
+private:
    //////////////////// YOUR CODE HERE //////////////////////
    std::vector<int> references;
    int page;

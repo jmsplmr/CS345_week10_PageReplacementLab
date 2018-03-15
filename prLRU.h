@@ -3,7 +3,7 @@
 *    Page Replacement LRU
 * Author:
 *    James Palmer
-* Summary: 
+* Summary:
 *    This is the DERRIVED class to implement LRU
 ************************************************************************/
 #pragma once
@@ -17,7 +17,7 @@
  ***************************************************/
 class PageReplacementLRU : public PageReplacementAlgorithm
 {
-   public:
+public:
    /*****************************************************
     * CONSTRUCTOR
     * initialize the data structures specific to LRU
@@ -33,7 +33,7 @@ class PageReplacementLRU : public PageReplacementAlgorithm
     ***************************************************/
    void run (int);
 
-   private:
+private:
    //////////////////// YOUR CODE HERE //////////////////////
    std::vector<int> pageStack;
    int numFrames;
