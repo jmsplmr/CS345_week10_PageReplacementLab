@@ -14,21 +14,21 @@ void PageReplacementSecond::run (int pageNumber)
    /////////////// YOUR CODE HERE ////////////////////
    // is pageNumber currently being used?
    for (int i = 0; i < getNumSlots (); i++)
-      if (pageFrame[i] == pageNumber)
+      if (pageFrame.at(i) == pageNumber)
       {
          history.at(i) = 1; //Gives the current slot a second chance
          record (pageNumber, false /*no fault*/);
          return;
       }
    
-   while (history[pageReference] == 1)
+   while (history.at(pageReference) == 1)
    {
       history.at(pageReference) = 0;
       pageReference = (pageReference + 1) % getNumSlots ();
    }
 
-   pageFrame[pageReference] = pageNumber;
-   history[pageReference] = 1;
+   pageFrame.at(pageReference) = pageNumber;
+   history.at(pageReference) = 1;
    pageReference = (pageReference + 1) % getNumSlots ();
 
    record (pageNumber, true /*page fault*/);

@@ -10,15 +10,6 @@
 
 #include "pr.h"   // for the PageReplacementAlgorithm base-class
 
-//struct PageReference
-//{
-//   int page, references;
-//
-//   PageReference (int, int);
-//
-//   friend bool operator== (const PageReference &, int);
-//};
-
 /****************************************************
  * Second Chance
  * The least-recently-used Approximation page replacement
