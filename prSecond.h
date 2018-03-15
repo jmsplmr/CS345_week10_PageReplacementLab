@@ -45,7 +45,6 @@ class PageReplacementSecond : public PageReplacementAlgorithm
 
    private:
    //////////////////// YOUR CODE HERE //////////////////////
-      int numSlots;
-      int *history;
+      std::vector<int> history;
       int pageReference;
 };
